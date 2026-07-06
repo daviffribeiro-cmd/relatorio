@@ -350,7 +350,6 @@ body{font-family:'Inter','Segoe UI',system-ui,-apple-system,sans-serif;backgroun
 
     <div class="card accent-teal">
       <h3>😊 Como Apolo está</h3>
-      <div class="sub">Resumo direto para a família</div>
       <div class="parent-mood">😊 Muito bem</div>
       <div class="parent-cols">
         <div class="parent-col">
@@ -370,8 +369,7 @@ body{font-family:'Inter','Segoe UI',system-ui,-apple-system,sans-serif;backgroun
 
     <div class="card ai-box accent-roxo">
       <h3>🧠 Análise Inteligente</h3>
-      <div class="sub">Parecer no formato de um coordenador pedagógico</div>
-      <div class="ai-out" id="outAiAnalise">Nas últimas quatro avaliações, Apolo evoluiu de 8,6 para 9,2 de média geral, um ganho consistente. Matemática e Ciências seguem como os maiores diferenciais, com notas máximas recentes. Geografia e Língua Portuguesa ainda apresentam oscilação, principalmente em Cartografia e em interpretação de texto, mas os últimos dois bimestres já mostram recuperação. Mantendo o ritmo atual de estudos, a projeção é que Apolo alcance o A+ completo (nota igual ou acima de 8,0 em todas as disciplinas) já no próximo bimestre.</div>
+      <div class="ai-out" id="outAiAnalise">Nas últimas quatro avaliações, Apolo evoluiu de 8,3 para 9,2 de média geral, um ganho consistente. Matemática e Ciências seguem como os maiores diferenciais, com notas máximas recentes. Geografia e Língua Portuguesa ainda apresentam oscilação, principalmente em Cartografia e em interpretação de texto, mas os últimos dois bimestres já mostram recuperação. Mantendo o ritmo atual de estudos, a projeção é que Apolo alcance o A+ completo (nota igual ou acima de 8,0 em todas as disciplinas) já no próximo bimestre.</div>
     </div>
   </div>
 
@@ -464,6 +462,10 @@ var subjects = [
   {name:"Língua Portuguesa", score:7.7, turma:8.2, rede:9.0, hist:[8.2,7.4,7.1,7.7]},
   {name:"Matemática", score:9.3, turma:8.6, rede:9.1, hist:[8.0,9.5,8.7,9.3]},
 ];
+
+// Média geral por bimestre — mesma fonte usada no relatório PDF consolidado,
+// para garantir que os números batem entre o site e o PDF.
+var bimesterAverages = [8.3, 8.5, 8.6, 9.2];
 
 var tabs = [
   {id:"resumo", ic:"🏠", lb:"Resumo"},
@@ -648,13 +650,8 @@ function renderRelatorio(){
   var media = (somaScores/subjects.length);
   var zoneLabelMap = {critico:"Crítica", atencao:"Atenção", bom:"Boa", excelencia:"Excelência"};
 
-  // evolução bimestre 1 -> bimestre 4 (média da turma de disciplinas)
-  var avgsByBim = [0,0,0,0];
-  for(var b=0;b<4;b++){
-    var soma = 0;
-    for(var i=0;i<subjects.length;i++){ soma += subjects[i].hist[b]; }
-    avgsByBim[b] = soma/subjects.length;
-  }
+  // evolução bimestre 1 -> bimestre 4 (mesma fonte do PDF consolidado)
+  var avgsByBim = bimesterAverages;
   var evoluiu = avgsByBim[3] - avgsByBim[0];
 
   var zoneColorMap = {critico:"var(--critico)", atencao:"var(--atencao)", bom:"var(--bom)", excelencia:"var(--excel-text)"};
@@ -817,12 +814,7 @@ function renderNotasChart(){
 // ───────────────────────── TIMELINE ─────────────────────────
 function renderTimeline(){
   var labels = ["1º Bim","2º Bim","3º Bim","4º Bim"];
-  var avgs = [0,0,0,0];
-  for(var b=0;b<4;b++){
-    var sum = 0;
-    for(var i=0;i<subjects.length;i++){ sum += subjects[i].hist[b]; }
-    avgs[b] = sum/subjects.length;
-  }
+  var avgs = bimesterAverages;
   var html = "";
   for(var i=0;i<avgs.length;i++){
     var z = zoneOf(avgs[i]);
